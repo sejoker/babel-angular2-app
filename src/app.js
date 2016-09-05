@@ -3,13 +3,6 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import 'rxjs/add/operator/map';
-import {
-  applyMiddleware,
-  Store,
-  combineReducers,
-  compose,
-  createStore
-} from 'redux';
 import { NgRedux, select } from 'ng2-redux';
 import createLogger from 'redux-logger';
 import { rootReducer } from './reducers';
@@ -75,9 +68,9 @@ export class Counter {
   selector: 'hello-app',
   template: `
     <ul>
-      <li><a [routerLink]="['/']">Hello</a></li>
-      <li><a [routerLink]="['/ciao', 'ng2']">Ciao</a></li>
       <li><a [routerLink]="['/counter']">Counter</a></li>
+      <li><a [routerLink]="['/hello']">Hello</a></li>
+      <li><a [routerLink]="['/ciao', 'ng2']">Ciao</a></li>
     </ul>
     <router-outlet></router-outlet>
     <linker name="GitHub" url="https://github.com/shuhei/babel-angular2-app"></linker>
@@ -87,9 +80,9 @@ export class HelloApp {
 }
 
 const routing = RouterModule.forRoot([
-  { path: '', component: Hello },
+  { path: '', component: Counter },
+  { path: 'hello', component: Hello },
   { path: 'ciao/:name', component: Ciao },
-  { path: 'counter', component: Counter },
 ]);
 
 @NgModule({
@@ -102,7 +95,7 @@ const routing = RouterModule.forRoot([
     Hello,
     Ciao,
     Linker,
-    Counter
+    Counter,
   ],
   providers: [
     NgRedux,
@@ -114,11 +107,6 @@ const routing = RouterModule.forRoot([
 })
 export class AppModule {
   constructor(ngRedux: NgRedux) {
-    ngRedux.configureStore(rootReducer, {}, [ createLogger() ]);
+    ngRedux.configureStore(rootReducer, {}, [createLogger()]);
   }
 }
-
-// const store = createStore(
-//  //rootReducer,
-//  function() {},
-//  compose(applyMiddleware(reduxLogger)));
